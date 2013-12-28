@@ -86,7 +86,7 @@ namespace ShareWIFI
                         string result = StartCmd("netsh.exe", "wlan stop hostednetwork");
                         if (result.IndexOf("已停止") > -1)
                         {
-                            ShareWIFI(false);
+                            JShareWIFI(false);
                         }
                     }));
                 }).Start();
@@ -144,7 +144,7 @@ namespace ShareWIFI
                             string startResult = StartCmd(fileName, argument_2);
                             if (startResult.IndexOf("已启动") > -1)
                             {
-                                ShareWIFI(true);
+                                JShareWIFI(true);
 
                                 borderSite.IsEnabled = true;
                                 lblStatus.Content = lblStatus.ToolTip = "Network create successful.";
@@ -174,7 +174,7 @@ namespace ShareWIFI
             }
         }
 
-        private void ShareWIFI(bool isShare)
+        private void JShareWIFI(bool isShare)
         {
             try
             {
@@ -269,7 +269,7 @@ namespace ShareWIFI
             this.notifyIcon = new NotifyIcon();
             this.notifyIcon.BalloonTipText = "";
             this.notifyIcon.Text = "";
-            this.notifyIcon.Icon = new System.Drawing.Icon("logo.ico");//程序图标
+            this.notifyIcon.Icon = ShareWIFI.Properties.Resources.logo; //new System.Drawing.Icon("logo.ico");//程序图标
             this.notifyIcon.Visible = true;
             this.notifyIcon.Click += notityIcon_Click;
         }
