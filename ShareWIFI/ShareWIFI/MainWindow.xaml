@@ -4,26 +4,14 @@
         xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
         Title="Share-WIFI" Height="380" Width="300" ResizeMode="CanMinimize" Icon="/Images/appicon.png" Loaded="MetroWindow_Loaded"  StateChanged="MetroWindow_StateChanged" WindowStartupLocation="CenterScreen" Topmost="True" ShowInTaskbar="False" Closed="MetroWindow_Closed">
 
-    <Window.Resources>
-        <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Colours.xaml" />
-                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Fonts.xaml" />
-                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.xaml" />
-                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/Blue.xaml" />
-                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/BaseLight.xaml" />
-            </ResourceDictionary.MergedDictionaries>
-        </ResourceDictionary>
-    </Window.Resources>
-
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="30"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="30"/>
         </Grid.RowDefinitions>
-        <Menu Grid.Row="0" Background="#F1EDED">
-            <MenuItem Header="File(_F)" Height="20" Background="#F1EDED" Margin="0 5" BorderThickness="1" BorderBrush="#F1EDED">
+        <Menu Grid.Row="0" Background="#F1EDED" VerticalContentAlignment="Center" VerticalAlignment="Center">
+            <MenuItem Header="File(_F)" Background="#F1EDED" BorderThickness="1" BorderBrush="#F1EDED">
                 <MenuItem Header="About" Name="menuAbout" Click="menuAbout_Click"/>
                 <MenuItem Header="Quit" Name="menuQuit" Click="menuQuit_Click"/>
             </MenuItem>
@@ -49,9 +37,9 @@
                             <RowDefinition Height="30"/>
                         </Grid.RowDefinitions>
                         <Label Height="30" VerticalContentAlignment="Center" Grid.Row="0">Network Name:</Label>
-                        <TextBox Grid.Row="1" Name="txtNetworkName" VerticalContentAlignment="Center" Controls:TextboxHelper.Watermark="Please enter the network name." Controls:TextboxHelper.ClearTextButton="True" />
+                        <TextBox Grid.Row="1" Name="txtNetworkName" VerticalContentAlignment="Center" Controls:TextBoxHelper.Watermark="Please enter the network name." Controls:TextBoxHelper.ClearTextButton="True" />
                         <Label Height="30" VerticalContentAlignment="Center" Grid.Row="2">Password:</Label>
-                        <PasswordBox Grid.Row="3" Name="txtPassword" VerticalContentAlignment="Center" Controls:TextboxHelper.Watermark="Please enter the password." Controls:TextboxHelper.ClearTextButton="True" />
+                        <PasswordBox Grid.Row="3" Name="txtPassword" VerticalContentAlignment="Center" Controls:TextBoxHelper.Watermark="Please enter the password." Controls:TextBoxHelper.ClearTextButton="True" />
                         <Button Grid.Row="5" Width="100" Content="Create" Style="{DynamicResource SquareButtonStyle}" Name="btnCreate" Click="btnCreate_Click"/>
                     </Grid>
                 </Border>

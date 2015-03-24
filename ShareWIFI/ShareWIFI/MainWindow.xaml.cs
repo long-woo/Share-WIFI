@@ -38,9 +38,9 @@ namespace ShareWIFI
             IconShow();
         }
 
-        private void MetroWindow_Loaded(object sender, RoutedEventArgs e)
+        private async void MetroWindow_Loaded(object sender, RoutedEventArgs e)
         {
-            string result = StartCmd("netsh.exe", "wlan show hostednetwork");
+            string result = await StartCmd("netsh.exe", "wlan show hostednetwork");
             if (result.IndexOf("未配置") <= -1)
             {
                 var startVal_1 = result.IndexOf("“");
@@ -69,7 +69,7 @@ namespace ShareWIFI
             this.Close();
         }
 
-        private void chkIsEnable_IsCheckedChanged(object sender, EventArgs e)
+        private async void chkIsEnable_IsCheckedChanged(object sender, EventArgs e)
         {
             if (chkIsEnable.IsChecked == true)
             {
@@ -79,22 +79,15 @@ namespace ShareWIFI
             {
                 progressBar.IsActive = true;
                 borderSite.IsEnabled = false;
-                new Thread(() =>
+                string result = await StartCmd("netsh.exe", "wlan stop hostednetwork");
+                if (result.IndexOf("已停止") > -1)
                 {
-                    this.Dispatcher.Invoke(DispatcherPriority.Normal, (Action)(() =>
-                    {
-                        string result = StartCmd("netsh.exe", "wlan stop hostednetwork");
-                        if (result.IndexOf("已停止") > -1)
-                        {
-                            JShareWIFI(false);
-                        }
-                    }));
-                }).Start();
-
+                    await JShareWIFI(false);
+                }
             }
         }
 
-        private void btnCreate_Click(object sender, RoutedEventArgs e)
+        private async void btnCreate_Click(object sender, RoutedEventArgs e)
         {
 
             if (txtNetworkName.Text.Trim() == "")
@@ -131,39 +124,33 @@ namespace ShareWIFI
 
             try
             {
-                new Thread(() =>
+                string fileName = "netsh.exe";
+                string argument_1 = "wlan set hostednetwork mode=allow ssid=" + txtNetworkName.Text.Trim() + " key=" + txtPassword.Password.Trim();
+                string argument_2 = "wlan start hostednetwork";
+                string result = await StartCmd(fileName, argument_1);
+                if (result.IndexOf("已成功") > -1)
                 {
-                    this.Dispatcher.Invoke(DispatcherPriority.Normal, (Action)(() =>
+                    string startResult = await StartCmd(fileName, argument_2);
+                    if (startResult.IndexOf("已启动") > -1)
                     {
-                        string fileName = "netsh.exe";
-                        string argument_1 = "wlan set hostednetwork mode=allow ssid=" + txtNetworkName.Text.Trim() + " key=" + txtPassword.Password.Trim();
-                        string argument_2 = "wlan start hostednetwork";
-                        string result = StartCmd(fileName, argument_1);
-                        if (result.IndexOf("已成功") > -1)
-                        {
-                            string startResult = StartCmd(fileName, argument_2);
-                            if (startResult.IndexOf("已启动") > -1)
-                            {
-                                JShareWIFI(true);
+                        await JShareWIFI(true);
 
-                                borderSite.IsEnabled = true;
-                                lblStatus.Content = lblStatus.ToolTip = "Network create successful.";
-                            }
-                            else
-                            {
-                                progressBar.IsActive = false;
-                                lblStatus.Content = lblStatus.ToolTip = "Network create failure,ensure that this computer provides wireless networking capabilities.";
-                                borderSite.IsEnabled = true;
-                            }
-                        }
-                        else
-                        {
-                            progressBar.IsActive = false;
-                            lblStatus.Content = lblStatus.ToolTip = "Network create failure,insufficient permissions, you must run this program as administrator.";
-                            borderSite.IsEnabled = true;
-                        }
-                    }));
-                }).Start();
+                        borderSite.IsEnabled = true;
+                        lblStatus.Content = lblStatus.ToolTip = "Network create successful.";
+                    }
+                    else
+                    {
+                        progressBar.IsActive = false;
+                        lblStatus.Content = lblStatus.ToolTip = "Network create failure,ensure that this computer provides wireless networking capabilities.";
+                        borderSite.IsEnabled = true;
+                    }
+                }
+                else
+                {
+                    progressBar.IsActive = false;
+                    lblStatus.Content = lblStatus.ToolTip = "Network create failure,insufficient permissions, you must run this program as administrator.";
+                    borderSite.IsEnabled = true;
+                }
             }
             catch (Exception ex)
             {
@@ -174,7 +161,7 @@ namespace ShareWIFI
             }
         }
 
-        private void JShareWIFI(bool isShare)
+        private async Task JShareWIFI(bool isShare)
         {
             try
             {
@@ -230,29 +217,33 @@ namespace ShareWIFI
             progressBar.IsActive = false;
         }
 
-        private string StartCmd(string fileName, string argument)
+        private Task<string> StartCmd(string fileName, string argument)
         {
-            string result = "";
-            try
+            return Task.Factory.StartNew(() =>
             {
-                Process cmd = new Process();
-                cmd.StartInfo.FileName = fileName;
-                cmd.StartInfo.Arguments = argument;
-                cmd.StartInfo.UseShellExecute = false;
-                cmd.StartInfo.RedirectStandardInput = true;
-                cmd.StartInfo.RedirectStandardOutput = true;
-                cmd.StartInfo.CreateNoWindow = true;
-                cmd.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
-                cmd.Start();
-                result = cmd.StandardOutput.ReadToEnd();
-                cmd.WaitForExit();
-                cmd.Close();
-            }
-            catch (Exception e)
-            {
-                result = e.Message;
-            }
-            return result;
+                Thread.Sleep(100);
+                string result = "";
+                try
+                {
+                    Process cmd = new Process();
+                    cmd.StartInfo.FileName = fileName;
+                    cmd.StartInfo.Arguments = argument;
+                    cmd.StartInfo.UseShellExecute = false;
+                    cmd.StartInfo.RedirectStandardInput = true;
+                    cmd.StartInfo.RedirectStandardOutput = true;
+                    cmd.StartInfo.CreateNoWindow = true;
+                    cmd.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+                    cmd.Start();
+                    result = cmd.StandardOutput.ReadToEnd();
+                    cmd.WaitForExit();
+                    cmd.Close();
+                }
+                catch (Exception e)
+                {
+                    result = e.Message;
+                }
+                return result;
+            });
         }
 
 
