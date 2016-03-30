@@ -20,7 +20,6 @@ using System.Windows.Shapes;
 using System.Windows.Threading;
 using MahApps.Metro.Controls;
 using NETCONLib;
-using System.Windows.Forms;
 
 namespace ShareWIFI
 {
@@ -30,7 +29,7 @@ namespace ShareWIFI
     public partial class MainWindow : MetroWindow
     {
 
-        NotifyIcon notifyIcon;
+        System.Windows.Forms.NotifyIcon notifyIcon;
 
         public MainWindow()
         {
@@ -257,19 +256,46 @@ namespace ShareWIFI
 
         private void IconShow()
         {
-            this.notifyIcon = new NotifyIcon();
-            this.notifyIcon.BalloonTipText = "";
-            this.notifyIcon.Text = "";
+            this.notifyIcon = new System.Windows.Forms.NotifyIcon();
+            this.notifyIcon.BalloonTipText = "Share the computer network";
+            this.notifyIcon.BalloonTipTitle = "share wifi";
+            this.notifyIcon.Text = "share wifi\rShare the computer network";
             this.notifyIcon.Icon = ShareWIFI.Properties.Resources.logo; //new System.Drawing.Icon("logo.ico");//程序图标
             this.notifyIcon.Visible = true;
-            this.notifyIcon.Click += notityIcon_Click;
+            this.notifyIcon.MouseClick += notityIcon_MouseClick;
+
+            System.Windows.Forms.ToolStripMenuItem notifyMenuAbount = new System.Windows.Forms.ToolStripMenuItem()
+            {
+                Text = "关于"
+            };
+
+            System.Windows.Forms.ToolStripMenuItem notifyMenuExit = new System.Windows.Forms.ToolStripMenuItem()
+            {
+                Text = "退出"
+            };
+
+            System.Windows.Forms.ContextMenuStrip contextMenu = new System.Windows.Forms.ContextMenuStrip();
+            contextMenu.Items.Add(notifyMenuAbount);
+            contextMenu.Items.Add("-");
+            contextMenu.Items.Add(notifyMenuExit);
+
+            this.notifyIcon.ContextMenuStrip = contextMenu;
+
+            this.notifyIcon.ShowBalloonTip(5000);
         }
 
-        private void notityIcon_Click(object sender, EventArgs e)
+        private void notityIcon_MouseClick(object sender, System.Windows.Forms.MouseEventArgs e)
         {
-            this.Show();
-            this.WindowState = WindowState.Normal;
-            this.Topmost = true;
+            if (e.Button == System.Windows.Forms.MouseButtons.Left)
+            {
+                this.Show();
+                this.WindowState = WindowState.Normal;
+                this.Topmost = true;
+            }
+            else if (e.Button == System.Windows.Forms.MouseButtons.Right)
+            {
+
+            }
         }
 
         private void MetroWindow_Closed(object sender, EventArgs e)

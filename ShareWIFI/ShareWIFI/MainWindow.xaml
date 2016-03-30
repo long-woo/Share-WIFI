@@ -53,7 +53,7 @@
         </StatusBar>
 
         <Border Grid.RowSpan="3" Background="#000" Opacity="0.7" Panel.ZIndex="2" Name="gridOpacity" Visibility="Hidden" />
-        <Border Grid.RowSpan="3" Width="270" Height="230" Background="#fff" BorderBrush="#39f" BorderThickness="5" Opacity="1" Panel.ZIndex="3" Name="gridDialog" Visibility="Hidden">
+        <Border Grid.RowSpan="3" Width="270" Height="230" Background="#fff" BorderBrush="#39f" BorderThickness="1" Opacity="1" Panel.ZIndex="3" Name="gridDialog" Visibility="Hidden">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="30" />
@@ -63,7 +63,7 @@
                 </Grid.RowDefinitions>
                 <Label Grid.Row="0" VerticalContentAlignment="Center">developers : Jason Long</Label>
                 <Label Grid.Row="1" VerticalContentAlignment="Center">version : v1.3 Beta</Label>
-                <Label Grid.Row="2" VerticalContentAlignment="Center">github:</Label>
+                <Label Grid.Row="2" VerticalContentAlignment="Center">github : </Label>
                 <TextBlock Grid.Row="3" ToolTip="https://github.com/JasonLong-7/Share-WIFI">
                     <Hyperlink NavigateUri="https://github.com/JasonLong-7/Share-WIFI" Click="Hyperlink_Click">https://github.com/JasonLong-7/Share-WIFI</Hyperlink>
                 </TextBlock>
